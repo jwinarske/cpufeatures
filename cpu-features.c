@@ -523,7 +523,7 @@ get_elf_hwcap_from_getauxval(int hwcap_type) {
     typedef unsigned long getauxval_func_t(unsigned long);
 
     dlerror();
-    void* libc_handle = dlopen("libc.so", RTLD_NOW);
+    void* libc_handle = dlopen("libc.so.6", RTLD_NOW);
     if (!libc_handle) {
         D("Could not dlopen() C library: %s\n", dlerror());
         return 0;
@@ -624,6 +624,8 @@ get_elf_hwcap_from_proc_cpuinfo(const char* cpuinfo, int cpuinfo_len) {
             hwcaps |= HWCAP_IDIVA | HWCAP_IDIVT;
         if (has_list_item(cpuFeatures, "iwmmxt"))
             hwcaps |= HWCAP_IWMMXT;
+        if (has_list_item(cpuFeatures, "crc32"))
+            hwcaps |= HWCAP2_CRC32;
 
         free(cpuFeatures);
     }
